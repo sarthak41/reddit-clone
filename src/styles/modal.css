@@ -1,0 +1,142 @@
+:root {
+  --gray: rgb(245, 245, 245);
+  --dark-gray: rgb(145, 145, 145);
+  --red: rgb(217, 58, 0);
+  --light-red: rgb(255, 69, 0);
+  --green: rgb(148, 224, 68);
+}
+
+.overlay {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.modal {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transition: 0.5s all ease;
+  padding: 8rem 4rem;
+  width: clamp(400px, 45%, 450px);
+  border-radius: 12px;
+  z-index: 1000;
+  pointer-events: auto;
+  background: white;
+  box-shadow: 0 0 14px 8px rgba(0, 0, 0, 0.1);
+}
+
+.close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: transparent;
+  border: none;
+  transition: 0.3s all ease;
+  border-radius: 100%;
+  padding: 0.3rem;
+
+  display: grid;
+  place-items: center;
+}
+
+.close-btn:has(:hover, :focus) {
+  background-color: var(--gray);
+}
+
+.close-btn img {
+  width: 20px;
+  height: auto;
+}
+
+.modal form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.modal button[type='submit'] {
+  border-radius: 30px;
+  padding: 1em;
+  background-color: var(--red);
+  color: white;
+  font-weight: 700;
+  border: none;
+  transition: 0.3s all ease;
+}
+
+.modal form button:is(:focus, :hover) {
+  background-color: var(--light-red);
+}
+
+.label-input {
+  display: flex;
+  flex-direction: column;
+  border-radius: 30px;
+  border: 1px solid transparent;
+  background-color: var(--gray);
+  padding: 10px;
+  transition: 0.3s all ease;
+}
+
+.label-input:has(:focus, :hover) {
+  border: 1px solid var(--dark-gray);
+}
+
+.label-input:has(input:invalid) {
+  border: 1px solid var(--red);
+}
+
+.label-input:has(input:valid) {
+  border: 1px solid var(--green);
+}
+
+
+.modal label {
+  color: var(--dark-gray);
+  font-size: 0.8rem;
+  padding-left: 0.7rem;
+}
+
+.modal input {
+  border: none;
+  background-color: var(--gray);
+  border-radius: 0 0 30px 30px;
+  padding-left: 0.7rem;
+}
+
+.modal input:focus {
+  outline: none;
+}
+
+.err-msg {
+  color: var(--red);
+  margin: 2rem 0;
+  padding: 0.5rem 1.45rem;
+  display: flex;
+  align-items: center;
+
+  background-color: var(--light-red);
+  color: white;
+  border-radius: 30px;
+
+  position: absolute;
+  top: 0;
+  max-width: 70%;
+}
+
+.inherit-bg {
+  background-color: inherit;
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 48
+}
