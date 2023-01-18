@@ -1,11 +1,12 @@
 import {
-  // getAuth,
+  getAuth,
   createUserWithEmailAndPassword,
   updateProfile,
   signOut,
 } from "firebase/auth";
 import React, { useEffect } from "react";
-import { auth } from "../firebase/index";
+import { firestore, auth } from "../firebase/index";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import Input from "./Input";
 import closeIcon from "../images/svgs/close.svg";
 import "../styles/modal.css";
@@ -16,45 +17,42 @@ export default function Signup({
   alertMsg,
   setAlertMsg,
 }) {
-  const signup = () => {
+  const signup = async () => {
     if (alertMsg === "") {
       const email = document.getElementById("email");
       const password = document.getElementById("password");
       const uname = document.getElementById("username");
 
-      //creates account
-      createUserWithEmailAndPassword(auth, email.value, password.value)
-        .then((userCredential) => {
-          // const user = userCredential.user;
-          setAlertMsg("Account created! Redirecting to login page...");
+      try {
+        //creates account
+        await createUserWithEmailAndPassword(auth, email.value, password.value);
+        setAlertMsg("Account created! Redirecting to login page...");
+        email.parentNode.style.border = "1px solid var(--green)";
 
-          //set username
-          updateProfile(auth.currentUser, {
-            displayName: uname.value,
-          })
-            .then(() => {
-              alert("updated");
-            })
-            .catch((e) => {
-              alert(e);
-            });
+        //sets username
+        await updateProfile(auth.currentUser, { displayName: uname.value });
 
-          signOut(auth);
-
-          //redirect to login page
-          setTimeout(toggleModals, 1500);
-        })
-        .catch((error) => {
-          //error messages
-          let errorCode = error.code
-            .slice(error.code.indexOf("/") + 1)
-            .split("-")
-            .join(" ");
-
-          errorCode = errorCode[0].toUpperCase() + errorCode.slice(1);
-          setAlertMsg(errorCode);
-          email.parentNode.style.border = "1px solid var(--red)";
+        //puts user in db
+        await setDoc(doc(firestore, "User", auth.currentUser.uid), {
+          username: auth.currentUser.displayName,
+          karma: 0,
         });
+
+        //signs out, and switches to login modal
+        signOut(auth);
+        setTimeout(toggleModals, 1500);
+      } catch (error) {
+        console.log(error);
+        // error messages
+        let errorCode = error.code
+          .slice(error.code.indexOf("/") + 1)
+          .split("-")
+          .join(" ");
+
+        errorCode = errorCode[0].toUpperCase() + errorCode.slice(1);
+        setAlertMsg(errorCode);
+        email.parentNode.style.border = "1px solid var(--red)";
+      }
     }
   };
 
@@ -153,6 +151,12 @@ export default function Signup({
         <button className="close-btn" onClick={closeModals}>
           <img src={closeIcon} alt="Close Signup" />
         </button>
+        <div>
+          Already have an account?
+          <button className="btn-link" onClick={toggleModals}>
+            Log In
+          </button>
+        </div>
       </div>
     </div>
   );

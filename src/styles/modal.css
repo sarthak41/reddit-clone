@@ -1,13 +1,16 @@
 :root {
   --gray: rgb(245, 245, 245);
+  --grayer: rgb(218, 224, 230);
   --dark-gray: rgb(145, 145, 145);
   --red: rgb(217, 58, 0);
   --light-red: rgb(255, 69, 0);
   --green: rgb(148, 224, 68);
+  --blue: rgb(0, 121, 211);
 }
 
 .overlay {
   position: fixed;
+  z-index: 300;
   left: 0;
   top: 0;
   width: 100vw;
@@ -28,6 +31,20 @@
   pointer-events: auto;
   background: white;
   box-shadow: 0 0 14px 8px rgba(0, 0, 0, 0.1);
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.btn-link {
+  background-color: inherit;
+  text-decoration: underline;
+  color: var(--blue);
+  border: none;
+  padding: 0;
+  margin: 0 4px;
+  font-weight: 700;
 }
 
 .close-btn {
@@ -95,6 +112,13 @@
   border: 1px solid var(--green);
 }
 
+/*disables blue background for input when autofilled*/
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px var(--gray) inset !important;
+}
 
 .modal label {
   color: var(--dark-gray);

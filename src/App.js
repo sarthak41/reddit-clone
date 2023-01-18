@@ -1,16 +1,18 @@
 import "./App.css";
 import "./styles/global.css";
-// import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Signup from "./components/Signup";
 import { auth } from "./firebase/index";
 import { signOut } from "firebase/auth";
 import { useState, useEffect } from "react";
 import Login from "./components/Login";
+import Nav from "./components/Nav";
 
 function App() {
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [alertMsg, setAlertMsg] = useState("");
+  const [user, setUser] = useState(null);
 
   const toggleModals = () => {
     setShowLoginModal(!showLoginModal);
@@ -34,8 +36,14 @@ function App() {
 
   return (
     <>
-      <button onClick={() => setShowSignupModal(true)}>Sign up</button>
-      <button onClick={() => setShowLoginModal(true)}>Login</button>
+      <BrowserRouter>
+        <Nav
+          user={user}
+          setShowLoginModal={setShowLoginModal}
+          setUser={setUser}
+        />
+      </BrowserRouter>
+
       {showSignupModal && (
         <Signup
           toggleModals={toggleModals}
@@ -51,28 +59,9 @@ function App() {
           closeModals={closeModals}
           alertMsg={alertMsg}
           setAlertMsg={setAlertMsg}
+          setUser={setUser}
         />
       )}
-      {auth.currentUser && (
-        <div>
-          {auth.currentUser.uid} {auth.currentUser.displayName}
-        </div>
-      )}
-
-      <button
-        onClick={() => {
-          console.log(auth.currentUser);
-        }}
-      >
-        dekh
-      </button>
-      <button
-        onClick={() => {
-          signOut(auth);
-        }}
-      >
-        Logout
-      </button>
     </>
   );
 }
