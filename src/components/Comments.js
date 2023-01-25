@@ -11,18 +11,17 @@ import { useState } from "react";
 import { firestore } from "../firebase";
 import { toTimeAgo } from "../helpers";
 
-export default function Comments({ postId }) {
-  const [comments, setComments] = useState(null);
+export default function Comments({ postId, comments }) {
   const [usernames, setUsernames] = useState();
   const currTime = new Date().getTime() / 1000;
 
-  const getComments = async () => {
-    const postRef = await getDoc(doc(firestore, "Post", postId));
-    const commentsRef = collection(firestore, "Comment");
-    const commentQuery = query(commentsRef, where("pid", "==", postRef.id));
-    const comments = await getDocs(commentQuery);
-    setComments(comments);
-  };
+  // const getComments = async () => {
+  //   const postRef = await getDoc(doc(firestore, "Post", postId));
+  //   const commentsRef = collection(firestore, "Comment");
+  //   const commentQuery = query(commentsRef, where("pid", "==", postRef.id));
+  //   const comments = await getDocs(commentQuery);
+  //   setComments(comments);
+  // };
 
   const renderComment = (username, seconds, text) => {
     return (
@@ -49,32 +48,32 @@ export default function Comments({ postId }) {
     }
   };
 
+  const getUsername = async (comment) => {
+    const user = await getDoc(doc(firestore, "User", comment.uid));
+  };
+
   const renderAllComments = () => {
     return (
-      comments &&
-      usernames && (
+      comments && (
         <div className="card flex-column justify-start">
-          {comments.docs.map((commentRef) => {
-            const comment = commentRef.data();
-            console.log(usernames.get(commentRef.id));
-            return renderComment(
-              usernames.get(commentRef.id),
-              Math.floor(currTime - comment.time.seconds),
-              comment.text
-            );
+          {comments.map((comment) => {
+            const time = comment.time.seconds
+              ? Math.floor(currTime - comment.time.seconds)
+              : 0;
+            return renderComment("test", time, comment.text);
           })}
         </div>
       )
     );
   };
 
-  useEffect(() => {
-    getComments();
-  }, [postId]);
+  // useEffect(() => {
+  //   getComments();
+  // }, [postId]);
 
-  useEffect(() => {
-    getUsernames();
-  }, [comments]);
+  // useEffect(() => {
+  //   getUsernames();
+  // }, [comments]);
 
-  return comments && usernames ? renderAllComments() : null;
+  return comments ? renderAllComments() : null;
 }

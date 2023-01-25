@@ -1,4 +1,13 @@
-import { collection, doc, getDoc, addDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  addDoc,
+  updateDoc,
+  query,
+  where,
+} from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
 import React, { useState } from "react";
 import { useEffect } from "react";
@@ -23,11 +32,34 @@ export default function Post({ setShowLoginModal, user }) {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [img, setImg] = useState(null);
+  const [comments, setComments] = useState();
   const [commentCount, setCommentCount] = useState(0);
+  const [usernames, setUsernames] = useState();
 
   useEffect(() => {
     getPost();
   }, []);
+
+  const getComments = async (postRef) => {
+    const commentsRef = collection(firestore, "Comment");
+    const commentQuery = query(commentsRef, where("pid", "==", postRef.id));
+    const comments = await getDocs(commentQuery);
+    const commentData = comments.docs.map((comm) => comm.data());
+    setComments(commentData);
+  };
+
+  const getUsernames = () => {
+    if (comments) {
+      const usernames = new Map();
+      comments.docs.forEach(async (comm) => {
+        const c = comm.data();
+        const user = await getDoc(doc(firestore, "User", c.uid));
+        usernames.set(comm.id, user.data().username);
+      });
+      console.log(usernames);
+      setUsernames(usernames);
+    }
+  };
 
   const renderPost = () => {
     return (
@@ -72,6 +104,8 @@ export default function Post({ setShowLoginModal, user }) {
     setBody(post.text);
     setImg(img);
     setCommentCount(post.commentCount);
+
+    await getComments(postRef);
   };
 
   const getPost = async () => {
@@ -106,6 +140,11 @@ export default function Post({ setShowLoginModal, user }) {
       };
 
       await addDoc(collection(firestore, "Comment"), comment);
+      await updateDoc(doc(firestore, "Post", postId), {
+        commentCount: commentCount + 1,
+      });
+      setCommentCount(commentCount + 1);
+      setComments([...comments, comment]);
       setAlertMsg("Comment posted");
       setTimeout(() => {
         setAlertMsg("");
@@ -152,7 +191,7 @@ export default function Post({ setShowLoginModal, user }) {
       {alertMsg && <div className="err-msg position-top">{alertMsg}</div>}
       {renderPost()}
       {renderCommentForm()}
-      <Comments postId={postId} />
+      <Comments postId={postId} comments={comments} />
     </div>
   );
 }
