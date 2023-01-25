@@ -39,8 +39,7 @@ export default function Login({
         await signInWithEmailAndPassword(auth, email.value, password.value);
         setAlertMsg("Logged in!");
         const user = await getDoc(doc(firestore, "User", auth.currentUser.uid));
-        console.log(user.data());
-        setUser(user.data());
+        setUser({ uid: user.id, ...user.data() });
         setTimeout(closeModals, 1500);
       } catch (error) {
         let errorCode = error.code

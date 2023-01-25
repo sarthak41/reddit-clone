@@ -1,12 +1,11 @@
 import {
-  getAuth,
   createUserWithEmailAndPassword,
   updateProfile,
   signOut,
 } from "firebase/auth";
 import React, { useEffect } from "react";
 import { firestore, auth } from "../firebase/index";
-import { doc, setDoc, getDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import Input from "./Input";
 import closeIcon from "../images/svgs/close.svg";
 import "../styles/modal.css";

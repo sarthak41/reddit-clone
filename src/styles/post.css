@@ -1,0 +1,55 @@
+.flex-column {
+  display: grid;
+  place-items: center;
+  gap: 20px;
+}
+
+.justify-start {
+  place-items: start;
+}
+
+.gap-8 {
+  gap: 8px;
+}
+
+.card {
+  width: 70%;
+  background: white;
+  padding: 2rem;
+}
+
+.post-card {
+  margin: 0 auto;
+  min-width: 800px;
+  border-radius: 4px;
+
+  padding: 1rem;
+  padding-left: 4rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.post-img {
+  width: 100%;
+  height: auto;
+}
+
+.info {
+  display: flex;
+  gap: 4px;
+  color: var(--dark-gray);
+  font-size: 0.7rem;
+}
+
+/* .title {
+  margin: 0.8rem 0;
+} */
+
+.group {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 30px
+}

@@ -53,8 +53,10 @@ nav {
   gap: 15px;
 }
 
-img {
-  max-width: 30px;
+nav img,
+.icon {
+  max-width: 24px;
+  filter: opacity(0.5);
 }
 
 nav button {

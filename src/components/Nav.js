@@ -51,9 +51,7 @@ export default function Nav({ user, setShowLoginModal, setUser }) {
                       {(user.karma / 1000).toFixed(1)}k karma
                     </span>
                   </div>
-                  <button>
-                    <img src={expandIcon} alt="dropdown" />
-                  </button>
+                  <img src={expandIcon} alt="dropdown" />
                 </>
               ) : (
                 <button className="btn" onClick={() => setShowLoginModal(true)}>

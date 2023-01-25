@@ -1,0 +1,101 @@
+.after-nav {
+  position: relative;
+  top: 10vh;
+  padding: 5rem;
+}
+
+.center {
+  max-width: 80%;
+  margin: 0 auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  column-gap: 1.5rem;
+}
+
+.rule-card {
+  background-color: white;
+  border-radius: 4px;
+  padding: 1.3rem;
+  max-height: 30rem;
+}
+
+.rule-card li:not(:last-child) {
+  border-bottom: 1px solid var(--gray);
+}
+
+ol li {
+  padding: 8px;
+}
+
+.post h3 {
+  padding: 1rem;
+  border-bottom: 1px solid white;
+  margin-bottom: 2rem;
+}
+
+.post form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: white;
+  padding: 2rem;
+  border-radius: 4px;
+}
+
+.post form button[type="submit"] {
+  background: var(--blue);
+  width: 6rem;
+  padding: 0.4rem 0.9rem;
+  border: none;
+  color: white;
+  border-radius: 30px;
+  font-weight: 700;
+}
+
+.post :is(input, textarea) {
+  padding: 8px;
+  border: 1px solid var(--grayer);
+  border-radius: 4px;
+}
+
+.post :is(input, textarea):focus {
+  border: 1px solid black;
+  outline: none;
+}
+
+.post form:has(input:invalid, textarea:invalid, button:disabled) button[type="submit"] {
+  pointer-events: none;
+  background: var(--dark-gray);
+  color: var(--grayer);
+}
+
+textarea {
+  min-height: 10rem;
+  resize: vertical;
+}
+
+label[for="post-img"] {
+  transition: 0.3s all ease;
+  display: grid;
+  place-items: center;
+}
+
+label[for="post-img"]:hover {
+  background-color: var(--grayer);
+}
+
+.position-top {
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+}
+
+@media (max-width: 1000px) {
+  .rule-card {
+    display: none;
+    visibility: hidden;
+  }
+}
