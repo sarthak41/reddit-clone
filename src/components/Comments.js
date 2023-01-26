@@ -10,20 +10,30 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { firestore } from "../firebase";
 import { toTimeAgo } from "../helpers";
+import Comment from "./Comment";
+import Vote from "./Vote";
 
-export default function Comments({ postId, comments }) {
+export default function Comments({
+  postId,
+  comments,
+  user,
+  setShowLoginModal,
+}) {
   const [usernames, setUsernames] = useState();
   const currTime = new Date().getTime() / 1000;
 
-  const renderComment = (username, seconds, text) => {
+  const renderComment = (id, username, seconds, text, points, dbVote) => {
     return (
-      <div className="flex-column justify-start gap-8">
-        <div className="info">
-          <div style={{ color: "black" }}>{username}</div> ⋅{" "}
-          <div>{toTimeAgo(seconds)}</div>
-        </div>
-        <div>{text}</div>
-      </div>
+      <Comment
+        id={id}
+        username={username}
+        seconds={seconds}
+        text={text}
+        points={points}
+        user={user}
+        setShowLoginModal={setShowLoginModal}
+        dbVote={dbVote}
+      />
     );
   };
 
@@ -31,8 +41,9 @@ export default function Comments({ postId, comments }) {
     if (comments) {
       const usernames = new Map();
       comments.forEach(async (comm) => {
-        const user = await getDoc(doc(firestore, "User", comm.uid));
-        usernames.set(comm.time.seconds, user.data().username);
+        const comment = comm.data();
+        const user = await getDoc(doc(firestore, "User", comment.uid));
+        usernames.set(comment.time.seconds, user.data().username);
         setUsernames(usernames);
       });
     }
@@ -43,15 +54,18 @@ export default function Comments({ postId, comments }) {
       comments &&
       usernames && (
         <div className="card flex-column justify-start">
-          {comments.map((comment) => {
+          {comments.map((comm) => {
+            const comment = comm.data();
             const time = comment.time.seconds
               ? Math.floor(currTime - comment.time.seconds)
               : 0;
-            console.log(usernames);
+
             return renderComment(
+              comm.id,
               usernames.get(comment.time.seconds),
               time,
-              comment.text
+              comment.text,
+              comment.points
             );
           })}
         </div>

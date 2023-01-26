@@ -18,6 +18,7 @@ import "../styles/post.css";
 import commentIcon from "../images/svgs/comment.svg";
 import shareIcon from "../images/svgs/share.svg";
 import Comments from "./Comments";
+import Vote from "./Vote";
 
 export default function Post({ setShowLoginModal, user }) {
   let { subId, postId } = useParams();
@@ -35,35 +36,52 @@ export default function Post({ setShowLoginModal, user }) {
   const [comments, setComments] = useState();
   const [commentCount, setCommentCount] = useState(0);
   const [usernames, setUsernames] = useState();
+  const [points, setPoints] = useState(0);
+  const [dbVote, setDbVote] = useState(0);
 
   useEffect(() => {
     getPost();
   }, []);
 
+  useEffect(() => {
+    async function getVote() {
+      if (user && postId) {
+        const voteQuery = query(
+          collection(firestore, "Vote"),
+          where("pid", "==", postId),
+          where("uid", "==", user.uid)
+        );
+        const voteSnapshot = await getDocs(voteQuery);
+        const voteData = voteSnapshot.docs[0].data().point;
+
+        if (!voteData) {
+          setDbVote(0);
+        } else {
+          setDbVote(voteData);
+          console.log(voteData);
+        }
+      }
+    }
+    getVote();
+  }, [user, postId]);
+
   const getComments = async (postRef) => {
     const commentsRef = collection(firestore, "Comment");
     const commentQuery = query(commentsRef, where("pid", "==", postRef.id));
     const comments = await getDocs(commentQuery);
-    const commentData = comments.docs.map((comm) => comm.data());
-    setComments(commentData);
-  };
-
-  const getUsernames = () => {
-    if (comments) {
-      const usernames = new Map();
-      comments.docs.forEach(async (comm) => {
-        const c = comm.data();
-        const user = await getDoc(doc(firestore, "User", c.uid));
-        usernames.set(comm.id, user.data().username);
-      });
-      console.log(usernames);
-      setUsernames(usernames);
-    }
+    setComments(comments.docs);
   };
 
   const renderPost = () => {
     return (
-      <div className="post-card card">
+      <div className="post-card card" post-id={postId}>
+        <Vote
+          points={points}
+          position="left"
+          user={user}
+          setShowLoginModal={setShowLoginModal}
+          dbVote={dbVote}
+        />
         <div className="info">
           <div style={{ color: "black" }}>r/{subId}</div>⋅
           <div>
@@ -73,7 +91,7 @@ export default function Post({ setShowLoginModal, user }) {
         <h3 className="title">{title}</h3>
         <img src={img} alt="" className="post-img" />
         <div style={{ whiteSpace: "pre-wrap" }}>{body}</div>
-        <div className="group info">
+        <div className="group info justify-start">
           <div className="centre">
             <img
               src={commentIcon}
@@ -104,6 +122,7 @@ export default function Post({ setShowLoginModal, user }) {
     setBody(post.text);
     setImg(img);
     setCommentCount(post.commentCount);
+    setPoints(post.points);
 
     await getComments(postRef);
   };
@@ -191,7 +210,12 @@ export default function Post({ setShowLoginModal, user }) {
       {alertMsg && <div className="err-msg position-top">{alertMsg}</div>}
       {renderPost()}
       {renderCommentForm()}
-      <Comments postId={postId} comments={comments} />
+      <Comments
+        user={user}
+        postId={postId}
+        comments={comments}
+        setShowLoginModal={setShowLoginModal}
+      />
     </div>
   );
 }

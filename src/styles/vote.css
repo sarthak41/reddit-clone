@@ -1,0 +1,58 @@
+.vote-sec {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.vote-left {
+  flex-direction: column;
+  position: absolute;
+  top: 1rem;
+  left: 1.2rem;
+}
+
+.vote-bottom {
+  justify-content: center;
+  gap: 4px;
+}
+
+.vote-btn {
+  background: none;
+  border: none;
+}
+
+.gap-20 {
+  gap: 20px;
+}
+
+.vote-btn img {
+  width: 24px;
+  height: auto;
+
+  filter: invert(0.6);
+}
+
+.vote-bottom img {
+  width: 18px;
+  height: auto;
+}
+
+.upvote:hover {
+  filter:
+    invert(30%) sepia(67%) saturate(2760%) hue-rotate(1deg) brightness(102%) contrast(107%) !important;
+}
+
+.downvote:hover {
+  filter:
+    invert(50%) sepia(68%) saturate(504%) hue-rotate(191deg) brightness(102%) contrast(101%) !important;
+}
+
+.orange-filled {
+  filter:
+    invert(30%) sepia(67%) saturate(2760%) hue-rotate(1deg) brightness(102%) contrast(107%) !important;
+}
+
+.violet-filled {
+  filter:
+    invert(50%) sepia(68%) saturate(504%) hue-rotate(191deg) brightness(102%) contrast(101%) !important;
+}
