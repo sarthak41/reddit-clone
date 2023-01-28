@@ -92,7 +92,7 @@ export default function Post({ setShowLoginModal, user }) {
           </div>
         </div>
         <h3 className="title">{title}</h3>
-        <img src={img} alt="" className="post-img" />
+        {img && <img src={img} alt="" className="post-img" />}
         <div style={{ whiteSpace: "pre-wrap" }}>{body}</div>
         <div className="group info justify-start">
           <div className="centre">
@@ -115,7 +115,11 @@ export default function Post({ setShowLoginModal, user }) {
   const filterPost = async (postRef) => {
     const post = postRef.data();
     const user = (await getDoc(doc(firestore, "User", post.uid))).data();
-    const img = await getDownloadURL(ref(storage, `images/${post.imgid}`));
+    if (post.imgid) {
+      const imgRef = ref(storage, `images/${post.imgid}`);
+      const img = await getDownloadURL(ref(storage, `images/${post.imgid}`));
+      setImg(img);
+    }
 
     const timeDiff = Math.floor(currTime - post.time.seconds);
 
@@ -123,7 +127,6 @@ export default function Post({ setShowLoginModal, user }) {
     setTimePosted(toTimeAgo(timeDiff));
     setTitle(post.title);
     setBody(post.text);
-    setImg(img);
     setCommentCount(post.commentCount);
     setPoints(post.points);
 

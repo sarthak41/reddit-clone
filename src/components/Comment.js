@@ -74,7 +74,7 @@ export default function Comment({
           dbVote={dbVote}
           setPoints={setPoints}
         />
-        <button>Reply</button>
+        {/* <button>Reply</button> */}
       </div>
     </div>
   );

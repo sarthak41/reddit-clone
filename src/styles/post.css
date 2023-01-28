@@ -25,6 +25,7 @@
   padding: 2rem;
 }
 
+
 .post-card {
   margin: 0 auto;
   min-width: 800px;
@@ -38,6 +39,20 @@
   gap: 0.5rem;
 
   position: relative;
+}
+
+.post-card-2 {
+  margin: 0 auto;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.card-2 {
+  width: 40%;
+  background: white;
+  padding: 2rem;
 }
 
 .post-img {
@@ -66,4 +81,11 @@
 .comment {
   position: relative;
   width: 50vw;
+  border-left: 2px solid var(--grayer);
+  padding-left: 1rem;
+}
+
+.posts {
+  display: grid;
+  gap: 40px;
 }
