@@ -35,7 +35,6 @@ export default function Post({ setShowLoginModal, user }) {
   const [img, setImg] = useState(null);
   const [comments, setComments] = useState();
   const [commentCount, setCommentCount] = useState(0);
-  const [usernames, setUsernames] = useState();
   const [points, setPoints] = useState(0);
   const [dbVote, setDbVote] = useState(0);
 
@@ -52,13 +51,16 @@ export default function Post({ setShowLoginModal, user }) {
           where("uid", "==", user.uid)
         );
         const voteSnapshot = await getDocs(voteQuery);
-        const voteData = voteSnapshot.docs[0].data().point;
+        const vote = voteSnapshot.docs[0];
 
-        if (!voteData) {
-          setDbVote(0);
-        } else {
-          setDbVote(voteData);
-          console.log(voteData);
+        if (vote) {
+          const voteData = vote.data().point;
+          if (!voteData) {
+            setDbVote(0);
+          } else {
+            setDbVote(voteData);
+            console.log(voteData);
+          }
         }
       }
     }
@@ -81,6 +83,7 @@ export default function Post({ setShowLoginModal, user }) {
           user={user}
           setShowLoginModal={setShowLoginModal}
           dbVote={dbVote}
+          setPoints={setPoints}
         />
         <div className="info">
           <div style={{ color: "black" }}>r/{subId}</div>⋅

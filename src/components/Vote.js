@@ -6,7 +6,6 @@ import { useEffect } from "react";
 import {
   collection,
   doc,
-  getDoc,
   where,
   query,
   getDocs,
@@ -22,6 +21,7 @@ export default function Vote({
   user,
   setShowLoginModal,
   dbVote,
+  setPoints,
 }) {
   const [upvoted, setUpvoted] = useState(false);
   const [downvoted, setDownvoted] = useState(false);
@@ -53,45 +53,70 @@ export default function Vote({
       console.log(postId, commentId);
 
       let idType;
+      let coll;
 
       if (postId) {
         idType = "pid";
+        coll = "Post";
       } else {
         idType = "cid";
+        coll = "Comment";
       }
+
+      const id = idType === "pid" ? postId : commentId;
 
       const voteQuery = query(
         collection(firestore, "Vote"),
-        where(idType, "==", idType === "pid" ? postId : commentId),
+        where(idType, "==", id),
         where("uid", "==", user.uid)
       );
       const voteSnapshot = await getDocs(voteQuery);
       const voteData = voteSnapshot.docs[0];
       if (voteData) {
+        console.log(voteData.data().point, voteType);
         if (voteData.data().point !== voteType) {
+          //change upvote to downvote or vice versa
           setVotes(voteType);
           await updateDoc(doc(firestore, "Vote", voteData.id), {
             point: voteType,
           });
+
+          await updateDoc(doc(firestore, coll, id), {
+            points: points + voteType - voteData.data().point,
+          });
+          setPoints(points + voteType - voteData.data().point);
         } else {
+          //retract vote
           setUpvoted(false);
           setDownvoted(false);
           await deleteDoc(doc(firestore, "Vote", voteData.id));
+
+          await updateDoc(doc(firestore, coll, id), {
+            points: points - voteType,
+          });
+          setPoints(points - voteType);
         }
       } else {
+        //first time vote
         setVotes(voteType);
-        if (postId)
+        if (postId) {
           await addDoc(collection(firestore, "Vote"), {
             uid: user.uid,
             pid: postId,
             point: voteType,
           });
-        else if (commentId)
+        } else if (commentId) {
           await addDoc(collection(firestore, "Vote"), {
             uid: user.uid,
             cid: commentId,
             point: voteType,
           });
+        }
+
+        await updateDoc(doc(firestore, coll, id), {
+          points: points + voteType,
+        });
+        setPoints(points + voteType);
       }
     }
   };

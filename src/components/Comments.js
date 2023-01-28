@@ -1,17 +1,8 @@
-import {
-  getDocs,
-  collection,
-  query,
-  where,
-  getDoc,
-  doc,
-} from "firebase/firestore";
+import { getDoc, doc } from "firebase/firestore";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { firestore } from "../firebase";
-import { toTimeAgo } from "../helpers";
 import Comment from "./Comment";
-import Vote from "./Vote";
 
 export default function Comments({
   postId,
@@ -22,17 +13,15 @@ export default function Comments({
   const [usernames, setUsernames] = useState();
   const currTime = new Date().getTime() / 1000;
 
-  const renderComment = (id, username, seconds, text, points, dbVote) => {
+  const renderComment = (id, username, seconds, text, points) => {
     return (
       <Comment
-        id={id}
+        cid={id}
         username={username}
         seconds={seconds}
         text={text}
-        points={points}
         user={user}
         setShowLoginModal={setShowLoginModal}
-        dbVote={dbVote}
       />
     );
   };

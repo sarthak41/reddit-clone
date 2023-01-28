@@ -14,7 +14,9 @@ export default function Nav({ user, setShowLoginModal, setUser }) {
         <div className="flex">
           <li>
             <Link to="/">
-              <h1>reddit</h1>
+              <h1>
+                redd<span style={{ color: "var(--light-red)" }}>i</span>t
+              </h1>
             </Link>
           </li>
         </div>
@@ -69,7 +71,7 @@ export default function Nav({ user, setShowLoginModal, setUser }) {
                       setUser(null);
                     }}
                   >
-                    Logout
+                    <Link to="/">Logout</Link>
                   </button>
                 </li>
               </ul>

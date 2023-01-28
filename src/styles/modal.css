@@ -17,6 +17,7 @@
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.3);
+  transition: 1s;
 }
 
 .modal {
@@ -149,7 +150,7 @@ input:-webkit-autofill:active {
   border-radius: 30px;
 
   position: fixed;
-  top: 5rem;
+  top: 0rem;
   max-width: 70%;
 }
 
