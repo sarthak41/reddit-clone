@@ -18,23 +18,6 @@ export default function Login({
       const email = document.getElementById("email");
       const password = document.getElementById("password");
 
-      // signInWithEmailAndPassword(auth, email.value, password.value)
-      //   .then((userCredential) => {
-      //     setAlertMsg("Logged in!");
-
-      //     setTimeout(closeModals, 1500);
-      //   })
-      //   .catch((error) => {
-      //     let errorCode = error.code
-      //       .slice(error.code.indexOf("/") + 1)
-      //       .split("-")
-      //       .join(" ");
-
-      //     errorCode = errorCode[0].toUpperCase() + errorCode.slice(1);
-      //     setAlertMsg(errorCode);
-      //     email.parentNode.style.border = "1px solid var(--red)";
-      //   });
-
       try {
         await signInWithEmailAndPassword(auth, email.value, password.value);
         setAlertMsg("Logged in!");

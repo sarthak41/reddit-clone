@@ -30,10 +30,12 @@ export default function Comments({
     if (comments) {
       const usernames = new Map();
       comments.forEach(async (comm) => {
-        const comment = comm.data();
-        const user = await getDoc(doc(firestore, "User", comment.uid));
-        usernames.set(comment.time.seconds, user.data().username);
-        setUsernames(usernames);
+        if (comm.data) {
+          const comment = comm.data();
+          const user = await getDoc(doc(firestore, "User", comment.uid));
+          usernames.set(comment.time.seconds, user.data().username);
+          setUsernames(usernames);
+        }
       });
     }
   };
