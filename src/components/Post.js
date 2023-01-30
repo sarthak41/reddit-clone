@@ -59,7 +59,6 @@ export default function Post({ setShowLoginModal, user }) {
             setDbVote(0);
           } else {
             setDbVote(voteData);
-            console.log(voteData);
           }
         }
       }
@@ -151,7 +150,6 @@ export default function Post({ setShowLoginModal, user }) {
   const postComment = async (event) => {
     try {
       event.preventDefault();
-      console.log("LOL");
       const commentText = document.getElementById("comment").value;
       const pid = postId;
       const uid = user.uid;
@@ -164,12 +162,15 @@ export default function Post({ setShowLoginModal, user }) {
         points: 0,
       };
 
-      await addDoc(collection(firestore, "Comment"), comment);
+      const commentDoc = await addDoc(
+        collection(firestore, "Comment"),
+        comment
+      );
       await updateDoc(doc(firestore, "Post", postId), {
         commentCount: commentCount + 1,
       });
       setCommentCount(commentCount + 1);
-      setComments([...comments, comment]);
+      setComments([...comments, { ...comment, id: commentDoc.id }]);
       setAlertMsg("Comment posted");
       setTimeout(() => {
         setAlertMsg("");

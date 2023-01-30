@@ -24,7 +24,6 @@ export default function Home() {
 
   useEffect(() => {
     if (posts === undefined) getPosts();
-    console.log(posts);
   }, [posts]);
 
   return (

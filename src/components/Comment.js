@@ -47,7 +47,6 @@ export default function Comment({
           setDbVote(0);
         } else {
           setDbVote(voteData);
-          console.log(voteData);
         }
       }
     }

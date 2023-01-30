@@ -41,7 +41,6 @@ export default function Signup({
         signOut(auth);
         setTimeout(toggleModals, 1500);
       } catch (error) {
-        console.log(error);
         // error messages
         let errorCode = error.code
           .slice(error.code.indexOf("/") + 1)

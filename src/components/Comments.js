@@ -44,18 +44,28 @@ export default function Comments({
       usernames && (
         <div className="card flex-column justify-start">
           {comments.map((comm) => {
-            const comment = comm.data();
-            const time = comment.time.seconds
-              ? Math.floor(currTime - comment.time.seconds)
-              : 0;
+            if (comm.data) {
+              const comment = comm.data();
+              const time = comment.time.seconds
+                ? Math.floor(currTime - comment.time.seconds)
+                : 0;
 
-            return renderComment(
-              comm.id,
-              usernames.get(comment.time.seconds),
-              time,
-              comment.text,
-              comment.points
-            );
+              return renderComment(
+                comm.id,
+                usernames.get(comment.time.seconds),
+                time,
+                comment.text,
+                comment.points
+              );
+            } else {
+              return renderComment(
+                comm.id,
+                user.username,
+                Math.floor(currTime - comm.time.getTime() / 1000),
+                comm.text,
+                comm.points
+              );
+            }
           })}
         </div>
       )

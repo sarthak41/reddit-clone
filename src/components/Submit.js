@@ -128,7 +128,6 @@ export default function Submit({
                     const img = document.getElementById("post-img");
                     img.value = "";
                     setImgName("");
-                    console.log(user.uid);
                   }}
                 >
                   Remove image

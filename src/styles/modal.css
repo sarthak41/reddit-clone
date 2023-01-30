@@ -152,6 +152,8 @@ input:-webkit-autofill:active {
   position: fixed;
   top: 0rem;
   max-width: 70%;
+
+  z-index: 1000;
 }
 
 .inherit-bg {

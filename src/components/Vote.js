@@ -46,11 +46,9 @@ export default function Vote({
       setShowLoginModal(true);
     } else {
       const voteBtnDiv = event.target.parentNode.parentNode.parentNode;
-      console.log(voteBtnDiv);
 
       const postId = voteBtnDiv.getAttribute("post-id");
       const commentId = voteBtnDiv.getAttribute("comment-id");
-      console.log(postId, commentId);
 
       let idType;
       let coll;
@@ -73,7 +71,6 @@ export default function Vote({
       const voteSnapshot = await getDocs(voteQuery);
       const voteData = voteSnapshot.docs[0];
       if (voteData) {
-        console.log(voteData.data().point, voteType);
         if (voteData.data().point !== voteType) {
           //change upvote to downvote or vice versa
           setVotes(voteType);
